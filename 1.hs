@@ -19,3 +19,12 @@ binarysearch x xs
     mid = xs !! midIndex
     left = take midIndex xs
     right = drop (midIndex + 1) xs 
+
+quickSort :: Ord a => [a] -> [a]
+quickSort [] = []
+quickSort (p:xs) = quickSort [x | x <- xs, x <= p] ++ [p] ++ quickSort [x | x <- xs, x > p]
+main2 :: IO ()
+main2 = do
+    print $ binarysearch 3 [1..5] 
+    print $ binarysearch 6 [1..10]
+    print $ quickSort [3,6,8,10,1,2,1]
