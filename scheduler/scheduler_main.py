@@ -20,14 +20,17 @@ class Scheduler():
     def fcfs(self,verbose=False):
         """Runs the non preemptive version of the FCFS scheduler algorithm"""
         for i in range(len(self.plist)):
+            if verbose:
+                print("Process with pid",self.plist[i],"started")
             t=r.randint(1,5)
-            while(t!=0):
-                t-=1
+            while(t>0):
                 if verbose:
                     print("Running...")
-                    print("Process with process ID",self.plist[i],"started")
-                    print("Process finished!")
-                    print("Scheduler completed all generated processes.")
+                t-=1
+            if verbose:
+                print("Process finished!")
+        if verbose:
+            print("Scheduler completed all generated processes") 
     
     def priorityschedule(self,verbose=False):
         """Uses the priority scheduling algorithm"""
