@@ -1,5 +1,12 @@
 import random as r
 import argparse
+
+READY=0b00
+RUNNING=0b01
+WAITING=0b10
+DONE=0b11
+
+STATES={READY:"READY",RUNNING:"RUNNING",WAITING:"WAITING",DONE:"DONE"}
 class Process:
     def __init__(self,verbose=False):
         """Initializes processes and assigns them a process ID."""
@@ -13,36 +20,47 @@ class Scheduler():
         if type(p) not in [int] or p<=0:
             raise ValueError("Process count must be greater than 0 and a natural number")
         self.plist=[]
+        self.state={}
         for _ in range(p):
             task=Process()
             self.plist.append(task.pid)
+            self.state[task.pid]=READY
+    def setstate(self,pid,newstate,autotrace):
+        oldstate=self.state[pid]
+        self.state[pid]=newstate
+        
+        if autotrace:
+            print(f"[TRACE] PID {pid}: " f"{STATES[oldstate]} -> {STATES[newstate]}")
     
-    def fcfs(self,verbose=False):
+    def fcfs(self,verbose=False,autotrace=False):
         """Runs the non preemptive version of the FCFS scheduler algorithm"""
         for i in range(len(self.plist)):
+            self.setstate(self.plist[i],RUNNING,autotrace)
             if verbose:
                 print("Process with pid",self.plist[i],"started")
             t=r.randint(1,5)
             while(t>0):
+                t-=1
                 if verbose:
                     print("Running...")
-                t-=1
+            self.setstate(self.plist[i],DONE,autotrace)
             if verbose:
                 print("Process finished!")
         if verbose:
             print("Scheduler completed all generated processes") 
     
-    def priorityschedule(self,verbose=False):
+    def priorityschedule(self,verbose=False,autotrace=False):
         """Uses the priority scheduling algorithm"""
         #Assign random priority for now since this is a simulation
         priority=[(pid,r.randint(1,len(self.plist))) for pid in self.plist]
         priority.sort(key=lambda x: x[1])  # Descending priority
-        if verbose:
-            for pid in priority:
-                print("Process", pid, "started")
-                print("Running...")
-    
-    def roundrobin(self,quantum,total,verbose=False):
+        for pid,_ in priority:
+            self.setstate(pid,RUNNING,autotrace)
+            if verbose:
+                print("Running")
+            self.setstate(pid,DONE,autotrace)
+
+    def roundrobin(self,quantum,total,verbose=False,autotrace=False):
         """Simulates Round Robin with quantum and total algorithm time"""
         assert quantum>0,"Quantum must be greater than 0"
         assert total>0,"Total scheduler time should be greater than 0"
@@ -51,6 +69,7 @@ class Scheduler():
         c=[]
         while q:
             pid,remain=q.pop(0)
+            self.setstate(pid,RUNNING,autotrace)
             assert remain>0
             run_time=min(quantum,remain)
             remain-=run_time
@@ -59,8 +78,12 @@ class Scheduler():
             if verbose:
                 print("Process with pid",pid,"running for",run_time,"seconds")
             if remain>0:
+                self.setstate(pid,WAITING,autotrace)
+                if autotrace:
+                    print(f"[TRACE] PID {pid}:RUNNING -> WAITING")
                 q.append((pid,remain))
             else:
+                self.setstate(pid,DONE,autotrace)
                 if verbose:
                     print("Process with id",pid,"completed")
                 c.append(pid)
@@ -85,13 +108,14 @@ if __name__ == "__main__":
                         help="Total scheduler time (default: %(default)s)")
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Enable verbose output")
+    parser.add_argument("-A","--autotrace",action="store_true",help="See tracing details")
     
     args = parser.parse_args()
 
     scheduler = Scheduler(args.processes)
     if args.algorithm == "fcfs":
-        scheduler.fcfs(verbose=args.verbose)
+        scheduler.fcfs(verbose=args.verbose,autotrace=args.autotrace)
     elif args.algorithm == "priority":
-        scheduler.priorityschedule(verbose=args.verbose)
+        scheduler.priorityschedule(verbose=args.verbose,autotrace=args.autotrace)
     else:
-        scheduler.roundrobin(quantum=args.quantum, total=args.total, verbose=args.verbose)
+        scheduler.roundrobin(quantum=args.quantum, total=args.total, verbose=args.verbose,autotrace=args.autotrace)
