@@ -16,6 +16,7 @@ This project demonstrates process management and scheduling logic using Python c
 - **Priority Scheduling:** Random priorities assigned; processes sorted and executed by priority.
 - **Round Robin:** Quantum-based preemptive scheduling; simulates execution with total scheduler time.
 - **Verbose Mode:** Optional detailed output for each step of the scheduler.
+- **Autotrace Mode** Optional tracing about the scheduler's states and processes
 - **Unit Tests:** Ensure correctness of scheduler behavior.
 
 ---
@@ -50,4 +51,9 @@ python scheduler_main.py --algo priority -p 8 -v
 Run Round Robin:
 ```
 python scheduler_main.py --algo rr -p 10 -q 5 -t 200 -v
+```
+
+Use Autotrace Mode:
+```
+python scheduler_main.py --algo rr -p 20 -q 10 -t 200 -v -A
 ```
