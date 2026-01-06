@@ -55,5 +55,5 @@ python scheduler_main.py --algo rr -p 10 -q 5 -t 200 -v
 
 Use Autotrace Mode:
 ```
-python scheduler_main.py --algo rr -p 20 -q 10 -t 200 -v -A
+python scheduler_main.py --algo rr -p 20 -q 10 -t 200 -v --autotrace 
 ```
