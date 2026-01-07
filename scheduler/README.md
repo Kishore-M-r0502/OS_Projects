@@ -60,13 +60,13 @@ python scheduler_main.py --algorithm rr -p 20 -q 10 -t 200 -v --autotrace
 # Examples
 
 ## Help text
-! [Help text](docs/images/help.png)
+![Help text](docs/images/help.png)
 
 ## Autotrace Mode
-! [Autotrace](docs/images/autotrace.png)
+![Autotrace](docs/images/autotrace.png)
 
 ## Verbose Mode
-! [Verbose](docs/images/verbose.png)
+![Verbose](docs/images/verbose.png)
 
 # Generated Documentation
 
