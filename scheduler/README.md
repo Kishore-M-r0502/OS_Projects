@@ -45,15 +45,29 @@ python scheduler_main.py --algo fcfs -p 5
 
 Run Priority Scheduling (verbose):
 ```
-python scheduler_main.py --algo priority -p 8 -v
+python scheduler_main.py --algorithm priority -p 8 -v
 ```
 
 Run Round Robin:
 ```
-python scheduler_main.py --algo rr -p 10 -q 5 -t 200 -v
+python scheduler_main.py --algorithm rr -p 10 -q 5 -t 200 -v
 ```
 
 Use Autotrace Mode:
 ```
-python scheduler_main.py --algo rr -p 20 -q 10 -t 200 -v --autotrace 
+python scheduler_main.py --algorithm rr -p 20 -q 10 -t 200 -v --autotrace 
 ```
+# Examples
+
+## Help text
+! [Help text](docs/images/help.png)
+
+## Autotrace Mode
+! [Autotrace](docs/images/autotrace.png)
+
+## Verbose Mode
+! [Verbose](docs/images/verbose.png)
+
+# Generated Documentation
+
+- **PDF is generated from [File](docs/About_The_Simulator.md)**
