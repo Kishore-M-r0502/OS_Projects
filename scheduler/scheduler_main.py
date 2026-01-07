@@ -27,6 +27,8 @@ class Scheduler():
             self.state[task.pid]=READY
     def setstate(self,pid,newstate,autotrace):
         oldstate=self.state[pid]
+        if oldstate==newstate:
+            return
         self.state[pid]=newstate
         
         if autotrace:
@@ -79,8 +81,6 @@ class Scheduler():
                 print("Process with pid",pid,"running for",run_time,"seconds")
             if remain>0:
                 self.setstate(pid,WAITING,autotrace)
-                if autotrace:
-                    print(f"[TRACE] PID {pid}:RUNNING -> WAITING")
                 q.append((pid,remain))
             else:
                 self.setstate(pid,DONE,autotrace)
