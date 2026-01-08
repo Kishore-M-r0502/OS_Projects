@@ -1,3 +1,4 @@
+__version__= "0.2"
 import random as r
 import argparse
 
@@ -97,7 +98,8 @@ class Scheduler():
         return c,t
     
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Python Scheduler Simulation")
+    parser = argparse.ArgumentParser(description=f"Python Scheduler Simulator v{__version__}")
+    parser.add_argument("--version",action="version",version=f"Python Scheduler Simulator v{__version__}")
     parser.add_argument("-p", "--processes", type=int, default=5,
                         help="Number of processes (default: %(default)s)")
     parser.add_argument("-a", "--algorithm", choices=["fcfs", "priority", "rr"],

@@ -1,4 +1,4 @@
-# Python Scheduler Simulation
+# Python Scheduler Simulator - v0.2
 
 A simple Python project to simulate CPU scheduling algorithms, including:
 

@@ -1,4 +1,4 @@
-# Python Scheduler Simulation
+# Python Scheduler Simulator - version 0.2
 ### A Command Line Simulator for CPU Scheduling Policies
 
 - **Author:** Kishore M R
