@@ -1,4 +1,4 @@
-# Python Scheduler Simulator - v0.2
+# Python Scheduler Simulator - v0.3
 
 A simple Python project to simulate CPU scheduling algorithms, including:
 
@@ -16,6 +16,7 @@ This project demonstrates process management and scheduling logic using Python c
 - **Priority Scheduling:** Random priorities assigned; processes sorted and executed by priority.
 - **Round Robin:** Quantum-based preemptive scheduling; simulates execution with total scheduler time.
 - **Verbose Mode:** Optional detailed output for each step of the scheduler.
+- **Route:** Redirect state transition results into a user specified file
 - **Autotrace Mode:** Optional tracing about the scheduler's states and processes
 - **Unit Tests:** Ensure correctness of scheduler behavior.
 

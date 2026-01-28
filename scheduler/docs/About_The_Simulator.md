@@ -1,4 +1,4 @@
-# Python Scheduler Simulator - version 0.2
+# Python Scheduler Simulator - version 0.3
 ### A Command Line Simulator for CPU Scheduling Policies
 
 - **Author:** Kishore M R
@@ -77,12 +77,13 @@ The user has to pass the first flag listed in [Flags Available](#10-flags).Then 
 ## 10. Flags
 The following flags are available:
 - -h : Vist the help CLI utility
-- -a (Required,default is Round Robin) : Specify the algorithhm to be used.
+- -a (Required,default is Round Robin) : Specify the algorithm to be used.
 - -p (Required, defaults are prespecified) : Specify process count
 - -t (Required for Round Robin) : Set total algorithm running time
 - -q (global flag for Round Robin) : Specify the time for which each process must run atleast once
 - -v (Optional) : Show human readable interpretations
 - -A (Optional) : Show what the system is doing
+- -r (Optional) : Redirect state transitions into user specified file
 
 Note : Atleast one flag is required to see results
 

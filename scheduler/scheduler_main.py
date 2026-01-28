@@ -1,6 +1,7 @@
-__version__= "0.2"
+__version__= "0.3"
 import random as r
 import argparse
+from pathlib import Path
 
 READY=0b00
 RUNNING=0b01
@@ -17,11 +18,12 @@ class Process:
 
 class Scheduler():
     """Runs scheduler algorithms as per call"""
-    def __init__(self,p):
+    def __init__(self,p,log_file=None):
         if type(p) not in [int] or p<=0:
             raise ValueError("Process count must be greater than 0 and a natural number")
         self.plist=[]
         self.state={}
+        self.log_file=log_file
         for _ in range(p):
             task=Process()
             self.plist.append(task.pid)
@@ -33,7 +35,12 @@ class Scheduler():
         self.state[pid]=newstate
         
         if autotrace:
+            msg = f"[TRACE] PID {pid}: {STATES[oldstate]} -> {STATES[newstate]}"
             print(f"[TRACE] PID {pid}: " f"{STATES[oldstate]} -> {STATES[newstate]}")
+            
+            if self.log_file:
+                with self.log_file.open("a") as f:
+                    f.write(msg + "\n")
     
     def fcfs(self,verbose=False,autotrace=False):
         """Runs the non preemptive version of the FCFS scheduler algorithm"""
@@ -111,10 +118,19 @@ if __name__ == "__main__":
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Enable verbose output")
     parser.add_argument("-A","--autotrace",action="store_true",help="See tracing details")
+    parser.add_argument("-r","--route",type=str,help="Move results of the scheduler to a user-specified file")
     
     args = parser.parse_args()
 
-    scheduler = Scheduler(args.processes)
+    log_file = None
+    if args.route:
+        log_file = Path(args.route)
+        if not log_file.exists():
+            log_file.parent.mkdir(parents=True, exist_ok=True) # create folders if missing
+            log_file.touch()
+    print(f"[INFO] Logging states to {log_file}")
+
+    scheduler = Scheduler(args.processes,log_file=log_file)
     if args.algorithm == "fcfs":
         scheduler.fcfs(verbose=args.verbose,autotrace=args.autotrace)
     elif args.algorithm == "priority":
