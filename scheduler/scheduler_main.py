@@ -1,4 +1,4 @@
-__version__= "0.3"
+__version__= "0.4"
 import random as r
 import argparse
 from pathlib import Path
@@ -75,7 +75,7 @@ class Scheduler():
         assert quantum>0,"Quantum must be greater than 0"
         assert total>0,"Total scheduler time should be greater than 0"
         q=[(pid,r.randint(1,15)) for pid in self.plist]
-        t=0 #Counter(Scheduler)
+        t=0 
         c=[]
         while q:
             pid,remain=q.pop(0)
@@ -104,12 +104,31 @@ class Scheduler():
         assert len(c)<=len(self.plist)
         return c,t
     
+    def shortest_job_first(self,verbose=False,autotrace=False):
+
+        ready_queue = [(pid,r.randint(1,15)) for pid in self.plist]
+        ready_queue.sort(key=lambda x: x[1])
+        current_time = 0
+        for pid, burst in ready_queue:
+            start_time = current_time
+            end_time = current_time + burst
+            if verbose:
+                print(f"Process {pid} started at time {start_time} and will run for {burst} units")
+            self.setstate(pid,RUNNING,autotrace)
+            if verbose:
+                print(f"Process {pid} completed at time {end_time}")
+            self.setstate(pid,DONE,autotrace)
+        
+            current_time = end_time
+
+        print(f"All processes completed. Total time: {current_time}")
+    
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=f"Python Scheduler Simulator v{__version__}")
     parser.add_argument("--version",action="version",version=f"Python Scheduler Simulator v{__version__}")
     parser.add_argument("-p", "--processes", type=int, default=5,
                         help="Number of processes (default: %(default)s)")
-    parser.add_argument("-a", "--algorithm", choices=["fcfs", "priority", "rr"],
+    parser.add_argument("-a", "--algorithm", choices=["fcfs", "priority", "rr","sjf"],
                         default="rr", help="Scheduler algorithm to use (default: %(default)s)")
     parser.add_argument("-q", "--quantum", type=int, default=5,
                         help="Quantum for Round Robin (default: %(default)s)")
@@ -135,5 +154,7 @@ if __name__ == "__main__":
         scheduler.fcfs(verbose=args.verbose,autotrace=args.autotrace)
     elif args.algorithm == "priority":
         scheduler.priorityschedule(verbose=args.verbose,autotrace=args.autotrace)
-    else:
+    elif args.algorithm == "rr":
         scheduler.roundrobin(quantum=args.quantum, total=args.total, verbose=args.verbose,autotrace=args.autotrace)
+    else:
+        scheduler.shortest_job_first(verbose=args.verbose,autotrace=args.autotrace)

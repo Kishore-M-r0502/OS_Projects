@@ -1,4 +1,4 @@
-# Python Scheduler Simulator - version 0.3
+# Python Scheduler Simulator - version 0.4
 ### A Command Line Simulator for CPU Scheduling Policies
 
 - **Author:** Kishore M R
@@ -34,6 +34,7 @@ An algorithm determines how a Policy is implemented.It is only used to determine
 - First Come First Serve(Non Preemptive) - See [FCFS](#6fcfs)
 - Priority Scheduling(Non Preemptive) - See [Priority](#7priority)
 - Round Robin(Preemptive by default) - See [Round Robin](#8-round-robin)
+- Shortest Job First(Non Preemptive) - See [Shortest Job First](#9-shortest-job-first)
 
 ## 4. The Limitations of This Project
 This is a simulator.This is not a real scheduler.
@@ -68,13 +69,21 @@ reorder it so that the process can complete its job later.
 - 3.Repeat for all processes
 - 4.Done
 
-## 9.How Does the Project Work?
+## 9. Shortest Job First
+Process:
+- 1.Select the process with shortest running time and run it
+- 2.Remove it from the list
+- 3.Continue for all processes
+- 4.Done
+
+
+## 10.How Does the Project Work?
 This project is purely command line based and uses flags to control result visibility.
 
 ### What does the user have to do, you ask?
 The user has to pass the first flag listed in [Flags Available](#10-flags).Then the user can do the simulation using the listed flags
 
-## 10. Flags
+## 11. Flags
 The following flags are available:
 - -h : Vist the help CLI utility
 - -a (Required,default is Round Robin) : Specify the algorithm to be used.
@@ -87,7 +96,7 @@ The following flags are available:
 
 Note : Atleast one flag is required to see results
 
-## 11.Results of the Simulation:
+## 12.Results of the Simulation:
 
 ### Round Robin
 If quantum greater than total time, atleast one process never completes
@@ -98,7 +107,11 @@ All processes get completed
 ### Priority
 All processes get completed
 
-## 12. Conclusion
+### SJF
+All processes get completed in the Non Preemptive Version
+
+
+## 13. Conclusion
 Even if the project is a simulator, it clearly demonstrates scheduler policies and shows the limitations of each.
 
 
