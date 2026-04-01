@@ -1,0 +1,56 @@
+site_name: Python OS Scheduler Simulator
+site_url: https://Kishore-M-r0502.github.io/OS_Projects/
+site_description: A CLI tool to simulate CPU scheduling algorithms
+site_author: Kishore M R
+
+theme:
+  name: material
+  logo: images/logo.png
+  favicon: images/logo.png
+  font:
+    text: Inter
+    code: JetBrains Mono
+  palette:
+    # 🌞 Light mode
+    - scheme: default
+      primary: red
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+    # 🌙 Dark mode
+    - scheme: slate
+      primary: black
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - toc.integrate
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - search.share
+    - content.code.annotate
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+
+nav:
+  - Home: README.md
+  - About: About_The_Simulator.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Kishore-M-r0502

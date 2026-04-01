@@ -1,118 +1,127 @@
-# Python Scheduler Simulator - version 0.4
-### A Command Line Simulator for CPU Scheduling Policies
+---
+title: About the Simulator
+description: Design thinking and architecture behind the Python OS Scheduler Simulator
+author: Kishore M R
+program: B.Tech Computer Science Engineering, Semester 4
+type: Self-initiated learning project
+---
 
-- **Author:** Kishore M R
-- **Program:** B.Tech Computer Science Engineering
-- **Semester:** 4
-- **Project Type:** Learning Project
+# About the Python OS Scheduler Simulator
 
 ---
 
-## 1.About This Project
+## What This Project Is
 
-This project is a simulator for CPU Scheduling Policies.
-The CPU is the component of a computer which runs processes according to a caller's instructions.
+This is a simulator — not a real scheduler. It does not interact
+with the OS kernel or manage actual processes. What it does is
+model the decision-making logic of four CPU scheduling policies
+on randomly generated processes, and expose that logic through
+a flag-driven CLI.
 
-To do so, it uses some rules to decide the importance of an algorithms usage to a given scenario, based mainly on two things.
-- 1.The Existing Process
-- 2.The Incoming Process
+!!! info "Why build it?"
+    The goal was to understand scheduling from the inside —
+    by building it, not just reading about it.
 
-The type of algorithm used is also determined by:
-- 1.Positional View: Who Arrives First?
-- 2.Access View: Who Moves First?
-- 3.Instance View: Who Stays Longer?
+---
 
+## A Framework for Thinking About Schedulers
 
-## 2. What is a Policy?
-A Policy determines "handling effectiveness" , not order.
-If it can't generate a baseline efficiency based on its requirement, it is not a Policy, it is a situational aspect.
+Most resources describe scheduling algorithms by mechanism.
+This project approaches them by classification.
 
-### What is an Algorithm?
-An algorithm determines how a Policy is implemented.It is only used to determine how the policy completes execution.
+Every scheduling algorithm can be understood through three views:
 
-## 3. Policies Shown in This Project
-- First Come First Serve(Non Preemptive) - See [FCFS](#6fcfs)
-- Priority Scheduling(Non Preemptive) - See [Priority](#7priority)
-- Round Robin(Preemptive by default) - See [Round Robin](#8-round-robin)
-- Shortest Job First(Non Preemptive) - See [Shortest Job First](#9-shortest-job-first)
+| View | Question | Example |
+|---|---|---|
+| **Positional** | Who arrives first? | FCFS |
+| **Access** | Who moves first? | Priority |
+| **Instance** | Who stays longer? | Round Robin |
 
-## 4. The Limitations of This Project
-This is a simulator.This is not a real scheduler.
+!!! note "PAI Framework"
+    This Positional/Access/Instance classification is not standard
+    terminology. It emerged from thinking about what actually
+    differentiates one algorithm from another at a conceptual level,
+    beyond just implementation details.
 
-## 5. Project Architecture
-This project is made in the Python Programming Language and has 3 main components:
-- A Process - A task with an identifier
-- A Scheduler - An ordering generator
-- An Interface - Controls how the user sees details
+---
 
-## 6.FCFS
+## Policy vs Algorithm
 
-Process:
-- 1.Execute a process from start to finish
-- 2.Done
+These two terms are often used interchangeably. This project
+treats them as distinct:
 
-## 7.Priority
-A priority is assigned an order based on some external action and is executed in that order
+!!! abstract "Policy"
+    Defines the rule of fairness or efficiency.
+    Answers: *what outcome are we optimizing for?*
+    If it cannot generate a baseline efficiency from its own
+    requirements, it is not a policy — it is a situational response.
 
-Process:
-- 1.Execute a process
-- 2.Check priority of next item and execute until all processes are done.
-- 3.Exit
+!!! abstract "Algorithm"
+    Implements a policy.
+    Answers: *how do we achieve that outcome mechanically?*
 
-## 8. Round Robin
+---
 
-Process:
-- 1.A process is trying to run for a time duration which is specified.
-- 2.If the process runs completely within usable time -> done
-else
-reorder it so that the process can complete its job later.
-- 3.Repeat for all processes
-- 4.Done
+## The Four Policies
 
-## 9. Shortest Job First
-Process:
-- 1.Select the process with shortest running time and run it
-- 2.Remove it from the list
-- 3.Continue for all processes
-- 4.Done
+=== "FCFS"
+    The simplest policy. Processes execute in arrival order,
+    start to finish, with no interruption.
 
+    **PAI view:** Positional — position in the queue determines everything.
 
-## 10.How Does the Project Work?
-This project is purely command line based and uses flags to control result visibility.
+=== "Priority"
+    Processes are assigned a priority externally. The scheduler
+    sorts by priority and executes in that order.
 
-### What does the user have to do, you ask?
-The user has to pass the first flag listed in [Flags Available](#10-flags).Then the user can do the simulation using the listed flags
+    **PAI view:** Access — who gets access is determined before execution begins.
 
-## 11. Flags
-The following flags are available:
-- -h : Vist the help CLI utility
-- -a (Required,default is Round Robin) : Specify the algorithm to be used.
-- -p (Required, defaults are prespecified) : Specify process count
-- -t (Required for Round Robin) : Set total algorithm running time
-- -q (global flag for Round Robin) : Specify the time for which each process must run atleast once
-- -v (Optional) : Show human readable interpretations
-- -A (Optional) : Show what the system is doing
-- -r (Optional) : Redirect state transitions into user specified file
+=== "Round Robin"
+    Each process runs for a fixed quantum. If it doesn't complete,
+    it re-enters the queue. Repeats until all processes finish.
 
-Note : Atleast one flag is required to see results
+    **PAI view:** Instance — how long each process holds the CPU per
+    instance is the defining constraint.
 
-## 12.Results of the Simulation:
+    !!! warning "Known limitation"
+        If the quantum exceeds total scheduler time,
+        some processes never complete.
 
-### Round Robin
-If quantum greater than total time, atleast one process never completes
+=== "SJF"
+    The process with the shortest burst time runs first.
+    Minimizes average waiting time but requires knowing burst
+    times in advance.
 
-### FCFS
-All processes get completed
+    !!! tip
+        In real systems, burst times are rarely known in advance —
+        which is why SJF is mostly theoretical.
 
-### Priority
-All processes get completed
+---
 
-### SJF
-All processes get completed in the Non Preemptive Version
+## Architecture
 
+The project has three components:
 
-## 13. Conclusion
-Even if the project is a simulator, it clearly demonstrates scheduler policies and shows the limitations of each.
+=== "Process"
+    A task with an identifier and burst time.
 
+=== "Scheduler"
+    Generates execution order based on the selected policy.
 
+=== "Interface"
+    Controls what the user sees via flags.
 
+!!! info "Flag design"
+    `-v` and `-A` expose different layers of the simulation —
+    human-readable output vs raw state transitions.
+    `-r` redirects state transitions to a file,
+    useful for inspecting longer runs.
+
+---
+
+## Conclusion
+
+!!! quote
+    A simulator is a controlled environment for understanding
+    something that is otherwise hidden inside an OS kernel.
+    The value here is not the code — it is what the code makes visible.
