@@ -1,0 +1,5 @@
+# Ignore every Rust target directory
+**/target/
+
+# Ignore every generated mdBook
+**/book/book/

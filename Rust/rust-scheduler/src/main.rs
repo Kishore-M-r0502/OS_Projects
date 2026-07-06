@@ -1,3 +1,5 @@
+mod state;
+mod process;
 fn main() {
-    println!("Hello, world!");
+    println!("Operating System Scheduling in Rust");
 }
