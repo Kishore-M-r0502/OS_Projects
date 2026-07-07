@@ -1,3 +1,5 @@
+use rand::RngExt;
+
 use crate::process::Process;
 
 pub struct Scheduler {
@@ -9,9 +11,13 @@ impl Scheduler {
     pub fn new(count: usize) -> Self {
         let mut processes = Vec::new();
 
-        for pid in 1..=count {
-            processes.push(Process::new(pid as u32));
-        }
+        let mut rng = rand::rng();
+
+for pid in 1..=count {
+    let burst = rng.random_range(1..=15);
+
+    processes.push(Process::new(pid as u32, burst));
+}
 
         Self {
             processes,
@@ -24,6 +30,15 @@ impl Scheduler {
     }
     pub fn processes(&self) -> &[Process] {
         &self.processes
+    }
+    pub fn processes_mut(&mut self) -> &mut [Process] {
+        &mut self.processes
+    }
+    pub fn time(&self) -> u32 {
+        self.time
+    }
+    pub fn advance_time(&mut self, amount: u32) {
+        self.time += amount;
     }
 }
 
@@ -44,5 +59,13 @@ fn scheduler_assigns_sequential_pids() {
     assert_eq!(scheduler.processes()[0].pid(), 1);
     assert_eq!(scheduler.processes()[1].pid(), 2);
     assert_eq!(scheduler.processes()[2].pid(), 3);
+}
+#[test]
+fn process_has_positive_burst_time() {
+    let scheduler = Scheduler::new(5);
+
+    for process in scheduler.processes() {
+        assert!(process.burst_time() >= 1);
+    }
 }
 }
