@@ -15,6 +15,12 @@ impl Process {
     pub fn pid(&self) -> u32 {
         self.pid
     }
+    pub fn state(&self) -> State {
+        self.state
+    }
+    pub fn set_state(&mut self, state: State) {
+        self.state = state;
+    }
 }
 #[cfg(test)]
 mod tests {
@@ -26,4 +32,21 @@ mod tests {
 
         assert_eq!(p.state, State::Ready);
     }
+    #[test]
+fn process_changes_state() {
+    let mut process = Process::new(1);
+
+    process.set_state(State::Running);
+
+    assert_eq!(process.state(), State::Running);
+}
+#[test]
+fn process_can_finish() {
+    let mut process = Process::new(1);
+
+    process.set_state(State::Running);
+    process.set_state(State::Done);
+
+    assert_eq!(process.state(), State::Done);
+}
 }
