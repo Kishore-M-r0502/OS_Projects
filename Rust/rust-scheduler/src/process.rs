@@ -34,9 +34,12 @@ impl Process {
 }
 
 pub fn start(&mut self, current_time: u32) {
-        self.state = State::Running;
+    self.state = State::Running;
+
+    if self.start_time.is_none() {
         self.start_time = Some(current_time);
     }
+}
 
     pub fn finish(&mut self, current_time: u32) {
         self.state = State::Done;
@@ -144,5 +147,14 @@ fn response_time_is_none_before_start() {
     let p = Process::new(1, 5);
 
     assert_eq!(p.response_time(), None);
+}
+#[test]
+fn process_records_first_start_time_only() {
+    let mut p = Process::new(1, 5);
+
+    p.start(3);
+    p.start(8);
+
+    assert_eq!(p.start_time, Some(3));
 }
 }
