@@ -1,5 +1,5 @@
 use rand::RngExt;
-
+use crate::algorithm::fcfs::run;
 use crate::process::Process;
 
 pub struct Scheduler {
@@ -40,7 +40,51 @@ for pid in 1..=count {
     pub fn advance_time(&mut self, amount: u32) {
         self.time += amount;
     }
-    
+    pub fn average_waiting_time(&self) -> f64 {
+        let mut sum = 0u32;
+        let mut count = 0u32;
+        for process in &self.processes {
+            if let Some(waiting) = process.waiting_time() {
+                sum += waiting;
+                count += 1;
+}
+
+}
+if count == 0 {
+    return 0.0;
+}
+sum as f64 / count as f64
+}
+pub fn average_turnaround_time(&self) -> f64{
+    let mut sum = 0u32;
+        let mut count = 0u32;
+        for process in &self.processes {
+            if let Some(turnaround) = process.turnaround_time() {
+                sum += turnaround;
+                count += 1;
+}
+
+}
+if count == 0 {
+    return 0.0;
+}
+sum as f64 / count as f64
+}
+pub fn average_response_time(&self) -> f64{
+    let mut sum = 0u32;
+        let mut count = 0u32;
+        for process in &self.processes {
+            if let Some(response) = process.response_time() {
+                sum += response;
+                count += 1;
+}
+
+}
+if count == 0 {
+    return 0.0;
+}
+sum as f64 / count as f64
+}
 }
 
 #[cfg(test)]
@@ -69,4 +113,46 @@ mod tests {
 //         assert!(process.burst_time() >= 1);
 //     }
 // }
+#[test]
+fn average_waiting_time_is_zero_for_new_scheduler() {
+    let scheduler = Scheduler::new(5);
+
+    assert_eq!(scheduler.average_waiting_time(), 0.0);
+}
+#[test]
+fn average_waiting_time_is_computed_after_fcfs() {
+    let mut scheduler = Scheduler::new(5);
+
+    run(&mut scheduler);
+
+    assert!(scheduler.average_waiting_time() >= 0.0);
+}
+#[test]
+fn average_turnaround_time_is_zero_for_new_scheduler() {
+    let scheduler = Scheduler::new(5);
+
+    assert_eq!(scheduler.average_turnaround_time(), 0.0);
+}
+#[test]
+fn average_turnaround_time_is_computed_after_fcfs() {
+    let mut scheduler = Scheduler::new(5);
+
+    run(&mut scheduler);
+
+    assert!(scheduler.average_turnaround_time() >= 0.0);
+}
+#[test]
+fn average_response_time_is_zero_for_new_scheduler() {
+    let scheduler = Scheduler::new(5);
+
+    assert_eq!(scheduler.average_response_time(), 0.0);
+}
+#[test]
+fn average_response_time_is_computed_after_fcfs() {
+    let mut scheduler = Scheduler::new(5);
+
+    run(&mut scheduler);
+
+    assert!(scheduler.average_response_time() >= 0.0);
+}
 }
