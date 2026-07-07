@@ -32,6 +32,15 @@ impl Process {
     pub fn burst_time(&self) -> u32 {
     self.burst_time
 }
+pub fn start(&mut self, current_time: u32) {
+        self.state = State::Running;
+        self.start_time = Some(current_time);
+    }
+
+    pub fn finish(&mut self, current_time: u32) {
+        self.state = State::Done;
+        self.completion_time = Some(current_time);
+    }
 }
 #[cfg(test)]
 mod tests {
@@ -60,5 +69,24 @@ fn process_can_finish() {
 
     assert_eq!(process.state(), State::Done);
 }
+#[test]
+fn process_starts() {
+    let mut p = Process::new(1, 5);
 
+    p.start(0);
+
+    assert_eq!(p.state(), State::Running);
+    assert_eq!(p.start_time, Some(0));
+}
+
+#[test]
+fn process_finishes() {
+    let mut p = Process::new(1, 5);
+
+    p.start(0);
+    p.finish(5);
+
+    assert_eq!(p.state(), State::Done);
+    assert_eq!(p.completion_time, Some(5));
+}
 }
