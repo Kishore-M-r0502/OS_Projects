@@ -1,20 +1,19 @@
 use crate::state::State;
 
-#[derive(Debug)]
 pub struct Process {
-    pub pid: u32,
-    pub state: State,
+    pid: u32,
+    state: State,
 }
-use rand::{Rng, RngExt};
 
 impl Process {
-    pub fn new() -> Self {
-        let mut rng = rand::rng();
-
+    pub fn new(pid: u32) -> Self {
         Self {
-            pid: rng.random_range(1..=1000),
+            pid,
             state: State::Ready,
         }
+    }
+    pub fn pid(&self) -> u32 {
+        self.pid
     }
 }
 #[cfg(test)]
@@ -23,7 +22,7 @@ mod tests {
 
     #[test]
     fn new_process_is_ready() {
-        let p = Process::new();
+        let p = Process::new(1);
 
         assert_eq!(p.state, State::Ready);
     }
