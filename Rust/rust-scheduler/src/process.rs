@@ -7,6 +7,7 @@ pub struct Process {
     arrival_time: u32,
     start_time: Option<u32>,
     completion_time: Option<u32>,
+    remaining_time: u32,
 }
 
 impl Process {
@@ -18,6 +19,7 @@ impl Process {
         arrival_time:0,
         start_time:None,
         completion_time:None,
+        remaining_time:burst_time,
     }
 }
     pub fn pid(&self) -> u32 {
@@ -55,6 +57,15 @@ pub fn start(&mut self, current_time: u32) {
     pub fn response_time(&self) -> Option<u32> {
     self.start_time
         .map(|start| start - self.arrival_time)
+}
+pub fn remaining_time(&self) -> u32{
+    self.remaining_time
+}
+pub fn run_for(&mut self, quantum: u32){
+    self.remaining_time = self.remaining_time.saturating_sub(quantum);
+}
+pub fn is_finished(&self) -> bool{
+    self.remaining_time == 0
 }
 }
 #[cfg(test)]
@@ -149,6 +160,7 @@ fn response_time_is_none_before_start() {
     assert_eq!(p.response_time(), None);
 }
 #[test]
+
 fn process_records_first_start_time_only() {
     let mut p = Process::new(1, 5);
 
@@ -156,5 +168,37 @@ fn process_records_first_start_time_only() {
     p.start(8);
 
     assert_eq!(p.start_time, Some(3));
+
+fn process_runs_for_quantum() {
+    let mut p = Process::new(1, 10);
+
+    p.run_for(3);
+
+    assert_eq!(p.remaining_time(), 7);
+}
+#[test]
+fn process_is_finished_when_remaining_time_is_zero() {
+    let mut p = Process::new(1, 4);
+
+    p.run_for(4);
+
+    assert!(p.is_finished());
+}
+#[test]
+fn remaining_time_is_initialized_to_burst_time() {
+    let p = Process::new(1, 6);
+
+    assert_eq!(p.remaining_time(), 6);
+}
+#[test]
+fn running_longer_than_remaining_time_sets_remaining_to_zero() {
+    let mut p = Process::new(1, 2);
+
+    p.run_for(10);
+
+    assert_eq!(p.remaining_time(), 0);
+    assert!(p.is_finished());
+
+}
 }
 }
