@@ -61,6 +61,9 @@ pub fn start(&mut self, current_time: u32) {
 pub fn remaining_time(&self) -> u32{
     self.remaining_time
 }
+pub fn completion_time(&self)->Option<u32>{
+    self.completion_time
+}
 pub fn run_for(&mut self, quantum: u32){
     self.remaining_time = self.remaining_time.saturating_sub(quantum);
 }
@@ -200,5 +203,23 @@ fn running_longer_than_remaining_time_sets_remaining_to_zero() {
     assert!(p.is_finished());
 
 }
+}
+#[test]
+fn queue_rotates_processes() {
+    use std::collections::VecDeque;
+
+    let mut queue = VecDeque::new();
+
+    queue.push_back(0);
+    queue.push_back(1);
+    queue.push_back(2);
+
+    assert_eq!(queue.pop_front(), Some(0));
+
+    queue.push_back(0);
+
+    assert_eq!(queue.pop_front(), Some(1));
+    assert_eq!(queue.pop_front(), Some(2));
+    assert_eq!(queue.pop_front(), Some(0));
 }
 }

@@ -5,3 +5,4 @@
 - [Chapter 3 - What is a Scheduler Anyway?](./scheduler.md)
 - [Chapter 4 - The Dynamics of Sequences - FCFS](./fcfs.md)
 - [Chapter 5 - The Ability to Measure - Metrics](./scheduling-metrics.md)
+- [Chapter 6 - The Aspect of Fairness - Round Robin](./round_robin.md)
