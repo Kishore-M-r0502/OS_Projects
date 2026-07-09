@@ -94,7 +94,12 @@ if count == 0 {
 }
 sum as f64 / count as f64
 }
+
+pub fn iter_processes(&self) -> impl Iterator<Item = &Process>{
+    self.processes.iter()
 }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
